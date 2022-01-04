@@ -1,0 +1,58 @@
+$buttonSize: 24px;
+$arrowSize: $buttonSize / 4;
+
+.arrow {
+  position: absolute;
+  width: $buttonSize;
+  height: $buttonSize;
+  background: #cccccc;
+  border-radius: $buttonSize;
+  color: #ffffff;
+  cursor: pointer;
+  line-height: $buttonSize;
+  margin-left: -($buttonSize / 2);
+  transition: all 0.25s ease-in-out;
+  &:hover {
+    background: #000000;
+    color: #ffffff;
+  }
+  &:after {
+    position: absolute;
+    display: inline-block;
+    content: '';
+    width: $arrowSize;
+    height: $arrowSize;
+    top: 50%;
+    left: 50%;
+  }
+}
+
+.left {
+  left: 20px;
+  &:after {
+    margin-left: -($arrowSize * 0.5);
+    margin-top: -($arrowSize * 0.25);
+    border-top: 2px solid;
+    border-left: 2px solid;
+    transform: rotateZ(-45deg);
+    top: 41%;
+  }
+}
+
+.right {
+  right: 20px;
+  &:after {
+    margin-left: -($arrowSize * 0.5);
+    margin-top: -($arrowSize * 0.75);
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+    transform: rotateZ(-45deg);
+    left: 41%;
+  }
+}
+
+.wrapper {
+  position: absolute;
+  width: 100%;
+}
+

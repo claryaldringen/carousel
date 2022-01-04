@@ -1,0 +1,25 @@
+.indicator {
+  margin: auto;
+  width: fit-content;
+}
+
+.point {
+  width: 8px;
+  height: 8px;
+  border-radius: 8px;
+  border: solid 1px #cccccc;
+  background: #cccccc;
+  cursor: pointer;
+  float: left;
+  margin: 8px;
+
+  &:hover {
+    background: #000000;
+  }
+}
+
+.actual {
+  border-color: #000000;
+  background: #000000;
+  cursor: auto;
+}
