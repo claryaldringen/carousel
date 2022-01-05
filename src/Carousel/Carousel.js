@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { cloneElement, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Arrow, ARROW_LEFT, ARROW_RIGHT } from '../Arrow'
 import styles from './Carousel.module.scss'
@@ -58,7 +58,7 @@ export const Carousel = ({ leftArrow, rightArrow, indicator, children, className
       <div className={styles.stripe} style={stripeStyle}>
         {children.map((child, i) => (
           <div key={`slide_${i}`} className={styles.slide}>
-            {child}
+            {cloneElement(child, { active: i === actual })}
           </div>
         ))}
       </div>
