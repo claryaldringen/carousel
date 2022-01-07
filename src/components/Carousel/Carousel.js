@@ -1,24 +1,26 @@
 import React, { cloneElement, useCallback, useEffect, useMemo, useState } from 'react'
+import classNames from 'classnames'
+import { useId } from 'react-id-generator'
 
 import { Arrow, ARROW_LEFT, ARROW_RIGHT } from '../Arrow'
+import { Indicator } from '../Indicator'
+
 import styles from './Carousel.module.scss'
 
-import { Indicator } from '../Indicator'
-import classNames from 'classnames'
-
-export const Carousel = ({ leftArrow, rightArrow, indicator, children, className }) => {
+export const Carousel = ({ leftArrow, rightArrow, indicator, children, className, ...props }) => {
   const [widths, setWidths] = useState([])
   const [height, setHeight] = useState(0)
   const [actual, setActual] = useState(0)
+  const [htmlId] = useId()
 
   useEffect(() => {
-    if (!widths.length || !widths[0]) {
-      setWidths(Array.from(document.getElementsByClassName(styles.slide)).map(({ offsetWidth }) => offsetWidth))
-    }
+    setWidths(
+      Array.from(document.querySelectorAll(`#${htmlId} .${styles.slide}`)).map(({ offsetWidth }) => offsetWidth)
+    )
   }, [actual, setWidths])
 
   useEffect(() => {
-    setTimeout(() => setHeight(document.getElementsByClassName(styles.stripe)[0].offsetHeight), 300)
+    setTimeout(() => setHeight(document.getElementById(htmlId)?.offsetHeight), 300)
   }, [setHeight])
 
   const translate = useMemo(
@@ -54,19 +56,21 @@ export const Carousel = ({ leftArrow, rightArrow, indicator, children, className
   }
 
   return (
-    <div className={classNames(styles.carousel, className)}>
-      <div className={styles.stripe} style={stripeStyle}>
+    <div className={classNames(styles.carousel, className)} {...props}>
+      <div className={styles.stripe} style={stripeStyle} id={htmlId}>
         {children.map((child, i) => (
           <div key={`slide_${i}`} className={styles.slide}>
-            {cloneElement(child, { active: i === actual })}
+            {typeof child.type === 'function'
+              ? cloneElement(child, { actual, index: i, total: children.length })
+              : child}
           </div>
         ))}
       </div>
       <Indicator custom={indicator} total={children.length} actual={actual} onClick={setActual} />
-      {height && actual > 0 && (
+      {height > 0 && actual > 0 && (
         <Arrow custom={leftArrow} type={ARROW_LEFT} onClick={handleLeftClick} style={arrowStyle} />
       )}
-      {height && widths.length && actual < widths.length - 1 && (
+      {height > 0 && widths.length && actual < widths.length - 1 && (
         <Arrow custom={rightArrow} type={ARROW_RIGHT} onClick={handleRightClick} style={arrowStyle} />
       )}
     </div>

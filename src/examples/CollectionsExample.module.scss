@@ -1,0 +1,17 @@
+.collections {
+    width: 416px;
+    padding-left: 64px;
+    margin: auto;
+}
+
+.slide {
+    width: 320px;
+    height: 320px;
+    border-radius: 32px;
+    overflow: hidden;
+    margin: 16px;
+
+    img {
+        width: 100%;
+    }
+}

@@ -2,57 +2,26 @@ import React, { useMemo } from 'react'
 import useFetch from 'react-fetch-hook'
 
 import './App.css'
-import { Carousel } from './Carousel'
+import { CollectionsExample } from './examples/CollectionsExample'
+import { StoriesExample } from './examples/StoriesExample'
+import { Carousel3DExample } from './examples/Carousel3DExample'
 
 const App = () => {
-  const { data } = useFetch('https://web-task-api.herokuapp.com/api/v1/collections')
+  const { data: collections } = useFetch('https://web-task-api.herokuapp.com/api/v1/collections')
+  const { data: stories } = useFetch('https://web-task-api.herokuapp.com/api/v1/stories')
 
-  const imagesUrls = useMemo(() => data?.data.map(({ cover_image_url }) => cover_image_url), [data])
-
-  const customLeftArrowClick = () => console.log('Left arrow clicked')
-
-  const customLeftArrow = (
-    <div onClick={customLeftArrowClick} style={{ left: 32, top: 64 }}>
-      <b>&lt;</b>
-    </div>
+  const collectionsImageUrl = useMemo(
+    () => collections?.data.map(({ cover_image_url }) => cover_image_url),
+    [collections]
   )
 
-  const customRightArrow = (
-    <div style={{ right: 32, top: 64 }}>
-      <b>&gt;</b>
-    </div>
-  )
-
-  const CustomIndicator = ({ total, actual, onClick }) => (
-    <div>
-      {Array(total)
-        .fill()
-        .map((_, i) => (
-          <span onClick={() => onClick(i)} key={`ci_${i}`}>
-            &nbsp;
-            {i === actual ? <b>{i + 1}</b> : i + 1}
-            &nbsp;
-          </span>
-        ))}
-    </div>
-  )
+  const storiesImageUrl = useMemo(() => stories?.data.map(({ cover_src }) => cover_src), [stories])
 
   return (
     <div className="App">
-      {imagesUrls && (
-        <>
-          <Carousel>
-            {imagesUrls.map((src, i) => (
-              <img key={`img_${i}`} src={src} width={200} />
-            ))}
-          </Carousel>
-          <Carousel leftArrow={customLeftArrow} rightArrow={customRightArrow} indicator={<CustomIndicator />}>
-            {imagesUrls.map((src, i) => (
-              <img key={`img_${i}`} src={src} width={200} />
-            ))}
-          </Carousel>
-        </>
-      )}
+      {collectionsImageUrl && <CollectionsExample imagesUrls={collectionsImageUrl} />}
+      {storiesImageUrl && <StoriesExample imagesUrls={storiesImageUrl} />}
+      {collectionsImageUrl && <Carousel3DExample imagesUrls={collectionsImageUrl} />}
     </div>
   )
 }

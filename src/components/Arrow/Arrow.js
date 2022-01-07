@@ -7,6 +7,8 @@ export const ARROW_LEFT = 'left'
 export const ARROW_RIGHT = 'right'
 
 export const Arrow = ({ custom, type = ARROW_LEFT, onClick, style }) => {
+  if (custom === null) return null
+
   if (isValidElement(custom)) {
     const handleOnClick = (e) => {
       onClick()
@@ -20,6 +22,7 @@ export const Arrow = ({ custom, type = ARROW_LEFT, onClick, style }) => {
       style={style}
       onClick={onClick}
       className={classNames(styles.arrow, type === ARROW_LEFT ? styles.left : styles.right)}
+      role={`${type}-arrow`}
     />
   )
 }

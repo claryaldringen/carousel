@@ -1,0 +1,25 @@
+.collections {
+  width: 340px;
+  padding-left: 164px;
+  margin: auto;
+}
+
+.slide {
+  transition: 1000ms;
+  width: 128px;
+  height: 128px;
+  border-radius: 128px;
+  overflow: hidden;
+  margin: 20px;
+
+  img {
+    width: 100%;
+  }
+}
+
+.animation {
+  transition: 1000ms;
+  width: 160px;
+  height: 160px;
+  margin: 4px;
+}
