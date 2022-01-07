@@ -10,7 +10,7 @@ $arrowSize: 6px;
   color: #ffffff;
   cursor: pointer;
   line-height: $buttonSize;
-  margin-left: -($buttonSize / 2);
+  margin-left: -12px;
   transition: all 0.25s ease-in-out;
   &:hover {
     background: #000000;

@@ -1,7 +1,11 @@
 {
-  "name": "carousel",
+  "name": "@claryaldringen/carousel",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/claryaldringen"
+  },
   "version": "0.1.0",
-  "private": true,
+  "description": "Simple react carousel",
+  "homepage": "https://claryaldringen.github.io/carousel",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
@@ -43,12 +47,19 @@
     ]
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^25.3.4",
     "eslint-plugin-prettier": "^4.0.0",
     "gh-pages": "^3.2.3",
     "prettier": "^2.5.1",
+    "rollup-plugin-postcss": "^4.0.2",
     "sass": "^1.45.0"
-  }
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ]
 }
