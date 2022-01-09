@@ -7,60 +7,111 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 **yarn**
 
 ```bash
-yarn add XXX
+yarn add @claryaldringen/carousel
 ```
 
+**npm**
+
+```bash
+npm install @claryaldringen/carousel
+```
 ## Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Examples
 
-### `yarn build`
+Working examplese are [here](https://claryaldringen.github.io/carousel/).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Simple Carousel**
+```js
+import React from 'react';
+import { Carousel } from '@claryaldringen/carousel';
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+export const SimpleCarousel = () => (  
+<Carousel>
+    <img src="/public/images/image1.jpg" />
+    <img src="/public/images/image1.jpg" />
+    <img src="/public/images/image1.jpg" />
+  </Carousel>
+)
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Carousel with no indicator and no arrows**
+```js
+import React from 'react';
+import { Carousel } from '@claryaldringen/carousel';
 
-### `yarn eject`
+export const CarouselNoControls = () => (  
+<Carousel indicator={null} leftArrow={null} rightArrow={null}>
+    <img src="/public/images/image1.jpg" />
+    <img src="/public/images/image1.jpg" />
+    <img src="/public/images/image1.jpg" />
+  </Carousel>
+)
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**Carousel with custom indicator and arrows**
+```js
+import React from 'react';
+import { Carousel } from '@claryaldringen/carousel';
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+const CustomIndicator = ({ total, actual, onClick }) => (
+  <div>
+    {Array(total)
+      .fill()
+      .map((_, i) => (
+        <span onClick={() => onClick(i)} key={`ci_${i}`}>
+          &nbsp;
+          {i === actual ? <b>{i + 1}</b> : i + 1}
+          &nbsp;
+        </span>
+      ))}
+  </div>
+)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+export const CarouselCustomControls = () => (
+  <Carousel
+    leftArrow={
+      <div onClick={() => console.log('Left arrow click!')} style={{ position: 'absolute', left: 8, top: 200 }}>
+        <b>&lt;</b>
+      </div>
+    }
+    rightArrow={
+      <div
+        onClick={() => console.log('Right arrow click!')}
+        style={{ position: 'absolute', right: 8, top: 200, zIndex: 3 }}>
+        <b>&gt;</b>
+      </div>
+    }
+    indicator={<CustomIndicator />}
+  >
+    <img src="/public/images/image1.jpg" />
+    <img src="/public/images/image1.jpg" />
+    <img src="/public/images/image1.jpg" />
+  </Carousel>
+)
+```
+### Props
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+**Carousel**
 
-## Learn More
+| Name          | Args                                                                              |  Default | Description |
+|---------------|-----------------------------------------------------------------------------------|----------|------------|
+| leftArrow     | [React element](https://reactjs.org/docs/rendering-elements.html), null, undefined | undefined | When *null*, no left arrow is displayed. When *undefined*, the *Arrow* component from package is displayed. Otherwise the given React element is displayed.|
+| rightArrow    | [React element](https://reactjs.org/docs/rendering-elements.html), null, undefined | undefined | When *null*, no right arrow is displayed. When *undefined*, the *Arrow* component from package is displayed. Otherwise the given React element is displayed.|
+| indicator     | [React element](https://reactjs.org/docs/rendering-elements.html), null, undefined | undefined | When *null*, no indicator is displayed. When *undefined*, the *Indicator* component from package is displayed. Otherwise the given React component is displayed.|
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Other accepted props are same like in other [DOM Elements](https://reactjs.org/docs/dom-elements.html).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Indicator**
 
-### Code Splitting
+Indicator can have same props like any other [DOM Element](https://reactjs.org/docs/dom-elements.html), but accepts some more props from its parent Carousel:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+| Name    | Args              | Description                                                                     |
+|---------|-------------------|---------------------------------------------------------------------------------|
+| total   | number            | Number of elements in Carousel.                                                 |
+| actual  | number            | The index of active element in Carousel.                                        |
+| onClick | `(index) => void` | The onClick handler which accepts index of the next actual element in Carousel. |
 
-### Analyzing the Bundle Size
+**Arrow**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Arrow can have same props like any other [DOM Element](https://reactjs.org/docs/dom-elements.html), but accepts some more props from its parent Carousel:

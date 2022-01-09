@@ -19,9 +19,11 @@ const App = () => {
 
   return (
     <div className="App">
-      {collectionsImageUrl && <CollectionsExample imagesUrls={collectionsImageUrl} />}
-      {storiesImageUrl && <StoriesExample imagesUrls={storiesImageUrl} />}
-      {collectionsImageUrl && <Carousel3DExample imagesUrls={collectionsImageUrl} />}
+      <div className="Center">
+        {collectionsImageUrl && <CollectionsExample imagesUrls={collectionsImageUrl} />}
+        {storiesImageUrl && <StoriesExample imagesUrls={storiesImageUrl} />}
+        {collectionsImageUrl && <Carousel3DExample imagesUrls={collectionsImageUrl} />}
+      </div>
     </div>
   )
 }

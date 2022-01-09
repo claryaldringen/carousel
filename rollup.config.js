@@ -7,7 +7,7 @@ import pkg from './package.json'
 
 export default [
   {
-    input: 'src/components/Carousel/index.js',
+    input: 'src/components/index.js',
     output: [
       {
         file: pkg.main,
