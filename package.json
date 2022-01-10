@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/claryaldringen"
   },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Simple react carousel",
   "homepage": "https://claryaldringen.github.io/carousel",
   "dependencies": {
