@@ -1,6 +1,5 @@
-import React, { cloneElement, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { cloneElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
-import { useId } from 'react-id-generator'
 
 import { Arrow, ARROW_LEFT, ARROW_RIGHT } from '../Arrow'
 import { Indicator } from '../Indicator'
@@ -9,69 +8,54 @@ import styles from './Carousel.module.scss'
 
 export const Carousel = ({ leftArrow, rightArrow, indicator, children, className, ...props }) => {
   const [widths, setWidths] = useState([])
-  const [height, setHeight] = useState(0)
-  const [actual, setActual] = useState(0)
-  const [htmlId] = useId()
+  const [activeIndex, setActiveIndex] = useState(0)
+  const slidesRef = useRef([])
 
   useEffect(() => {
-    setWidths(
-      Array.from(document.querySelectorAll(`#${htmlId} .${styles.slide}`)).map(({ offsetWidth }) => offsetWidth)
-    )
-  }, [actual, setWidths])
+    setWidths(slidesRef.current.map(({ offsetWidth }) => offsetWidth))
+  }, [activeIndex, setWidths])
 
-  useEffect(() => {
-    setTimeout(() => setHeight(document.getElementById(htmlId)?.offsetHeight), 300)
-  }, [setHeight])
+  const stripeStyle = useMemo(() => {
+    const translation = widths.reduce((acc, width, index) => {
+      if (index < activeIndex) {
+        acc += width
+      }
+      return acc
+    }, 0)
 
-  const translate = useMemo(
-    () =>
-      widths.reduce((acc, width, index) => {
-        if (index < actual) {
-          acc += width
-        }
-        return acc
-      }, 0),
-    [actual, widths]
-  )
+    return {
+      transition: '1000ms',
+      transform: `translate(-${translation}px)`
+    }
+  }, [activeIndex, widths])
 
   const handleLeftClick = useCallback(() => {
-    if (actual) {
-      setActual(actual - 1)
+    if (activeIndex) {
+      setActiveIndex(activeIndex - 1)
     }
-  }, [actual, setActual])
+  }, [activeIndex, setActiveIndex])
 
   const handleRightClick = useCallback(() => {
-    if (widths.length && actual < widths.length - 1) {
-      setActual(actual + 1)
+    if (widths.length && activeIndex < widths.length - 1) {
+      setActiveIndex(activeIndex + 1)
     }
-  }, [widths.length, actual, setActual])
-
-  const stripeStyle = {
-    transition: '1000ms',
-    transform: `translate(-${translate}px)`
-  }
-
-  const arrowStyle = {
-    top: height / 2
-  }
+  }, [widths.length, activeIndex, setActiveIndex])
 
   return (
     <div className={classNames(styles.carousel, className)} {...props}>
-      <div className={styles.stripe} style={stripeStyle} id={htmlId}>
+      <div className={styles.stripe} style={stripeStyle}>
         {children.map((child, i) => (
-          <div key={`slide_${i}`} className={styles.slide}>
+          <div key={`slide_${i}`} ref={(el) => (slidesRef.current[i] = el)} className={styles.slide}>
             {typeof child.type === 'function'
-              ? cloneElement(child, { actual, index: i, total: children.length })
+              ? cloneElement(child, { activeIndex, index: i, total: children.length })
               : child}
           </div>
         ))}
       </div>
-      <Indicator custom={indicator} total={children.length} actual={actual} onClick={setActual} />
-      {height > 0 && actual > 0 && (
-        <Arrow custom={leftArrow} type={ARROW_LEFT} onClick={handleLeftClick} style={arrowStyle} />
-      )}
-      {height > 0 && widths.length && actual < widths.length - 1 && (
-        <Arrow custom={rightArrow} type={ARROW_RIGHT} onClick={handleRightClick} style={arrowStyle} />
+      <Indicator custom={indicator} total={children.length} actual={activeIndex} onClick={setActiveIndex} />
+      {activeIndex > 0 && <Arrow custom={leftArrow} type={ARROW_LEFT} onClick={handleLeftClick} />}
+      {widths.length && activeIndex < widths.length - 1 && (
+        <Arrow custom={rightArrow} type={ARROW_RIGHT} onClick={handleRightClick} />
       )}
     </div>
   )

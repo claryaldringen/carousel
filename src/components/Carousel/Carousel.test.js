@@ -1,14 +1,11 @@
 import React from 'react'
-import { fireEvent, render, waitForElementToBeRemoved, screen } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 
 import { Carousel } from './Carousel'
 
 describe('Given a Carousel component', () => {
-  beforeEach(() => {
-    jest.spyOn(document, 'getElementById').mockReturnValue({ offsetHeight: 100 })
-    jest
-      .spyOn(document, 'querySelectorAll')
-      .mockReturnValue([{ offsetWidth: 100 }, { offsetWidth: 200 }, { offsetWidth: 100 }])
+  beforeAll(() => {
+    Object.defineProperty(HTMLDivElement.prototype, 'offsetWidth', { configurable: true, value: 100 })
   })
 
   it('should render Carousel with right arrow and indicator', async () => {
@@ -58,7 +55,7 @@ describe('Given a Carousel component', () => {
     expect(getByRole('A').parentNode.parentNode.style.transform).toBe('translate(-100px)')
 
     fireEvent.click(rightArrow)
-    expect(getByRole('A').parentNode.parentNode.style.transform).toBe('translate(-300px)')
+    expect(getByRole('A').parentNode.parentNode.style.transform).toBe('translate(-200px)')
     expect(queryByRole('right-arrow')).not.toBeInTheDocument()
 
     const leftArrow = getByRole('left-arrow')
@@ -78,7 +75,7 @@ describe('Given a Carousel component', () => {
     )
 
     fireEvent.click(getByRole('indicator').childNodes[2])
-    expect(getByRole('A').parentNode.parentNode.style.transform).toBe('translate(-300px)')
+    expect(getByRole('A').parentNode.parentNode.style.transform).toBe('translate(-200px)')
   })
 
   it('should work with custom indicator', () => {
@@ -96,6 +93,6 @@ describe('Given a Carousel component', () => {
 
     fireEvent.click(getByRole('indicator'))
     // expect(indicatorClickMock).toHaveBeenCalledWith()
-    expect(getByRole('A').parentNode.parentNode.style.transform).toBe('translate(-300px)')
+    expect(getByRole('A').parentNode.parentNode.style.transform).toBe('translate(-200px)')
   })
 })

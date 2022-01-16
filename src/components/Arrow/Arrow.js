@@ -6,7 +6,7 @@ import styles from './Arrow.module.scss'
 export const ARROW_LEFT = 'left'
 export const ARROW_RIGHT = 'right'
 
-export const Arrow = ({ custom, type = ARROW_LEFT, onClick, style }) => {
+export const Arrow = ({ custom, type = ARROW_LEFT, onClick }) => {
   if (custom === null) return null
 
   if (isValidElement(custom)) {
@@ -19,7 +19,6 @@ export const Arrow = ({ custom, type = ARROW_LEFT, onClick, style }) => {
 
   return (
     <div
-      style={style}
       onClick={onClick}
       className={classNames(styles.arrow, type === ARROW_LEFT ? styles.left : styles.right)}
       role={`${type}-arrow`}
